@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoToAs.net | Official Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #050508;
+            color: #c5c6c7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Canvas do Efeito Matrix de Fundo */
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15; /* Deixa suave para não atrapalhar a leitura do texto */
+        }
+
+        /* Efeito de brilho neon no centro */
+        .background-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(102, 252, 241, 0.08) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 40px 20px;
+            z-index: 2;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #66fcf1;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 25px rgba(102, 252, 241, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #45f3ff;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        /* Painel de Recursos */
+        .features {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(11, 12, 16, 0.85);
+            border: 1px solid #1f2833;
+            padding: 20px;
+            border-radius: 8px;
+            width: 220px;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(3px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #66fcf1;
+            box-shadow: 0 5px 15px rgba(102, 252, 241, 0.1);
+        }
+
+        .card h3 {
+            color: #66fcf1;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #a9b2c3;
+        }
+
+        /* Seção de Botões de Download */
+        .download-section {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #0b0c10;
+            background-color: #66fcf1;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        .btn-download:hover {
+            background-color: #45f3ff;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(102, 252, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #66fcf1;
+            border: 2px solid #66fcf1;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(102, 252, 241, 0.1);
+            color: #45f3ff;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.8rem;
+            color: #4f5d75;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas onde a animação será desenhada -->
+    <canvas id="matrix-canvas"></canvas>
+    <div class="background-glow"></div>
+
+    <div class="container">
+        <h1>CoToAs.net</h1>
+        <p class="subtitle">O Gerenciador e Otimizador Avançado de Scripts Luau</p>
+
+        <!-- Grade de Recursos -->
+        <div class="features">
+            <div class="card">
+                <h3>Safe & Clean</h3>
+                <p>Ambiente totalmente monitorado e sem riscos para o seu computador.</p>
+            </div>
+            <div class="card">
+                <h3>FPS Boost</h3>
+                <p>Integração nativa com FastFlags para otimizar desempenho e remover lags.</p>
+            </div>
+            <div class="card">
+                <h3>Cloud Sync</h3>
+                <p>Salve e gerencie seus códigos favoritos direto no celular ou PC.</p>
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="download-section">
+            <a href="#" class="btn-download" onclick="alert('Iniciando download da versão PC de CoToAs.net (main.py)...')">
+                💻 DOWNLOAD PC
+            </a>
+            <a href="#" class="btn-download btn-secondary" onclick="alert('Iniciando download da versão Mobile (app.apk)...')">
+                📱 DOWNLOAD MOBILE
+            </a>
+        </div>
+
+        <footer>
+            &copy; 2026 CoToAs.net - Todos os direitos reservados de forma segura.
+        </footer>
+    </div>
+
+    <!-- Script que controla a animação Matrix -->
+    <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Faz o canvas ocupar a tela inteira
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Caracteres digitais do efeito Matrix (letras e números)
+        const katakana = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZCOTOASNET";
+        const alphabet = katakana.split("");
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        // Mantém a posição vertical de cada coluna
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        // Função de desenho que roda em loop continuamente
+        function drawMatrix() {
+            // Cria o efeito de rastro escurecendo o frame anterior de forma gradual
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0'; // Cor verde para os caracteres
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                // Reseta a queda da gota para o topo aleatoriamente quando bate no final da tela
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        // Executa a função a cada 30 milissegundos
+        setInterval(drawMatrix, 30);
+    </script>
+</body>
+</html>
