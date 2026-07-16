@@ -1,0 +1,1 @@
+Erro ao abrir a interface: '_tkinter.tkapp' object has no attribute 'acao_executar'
